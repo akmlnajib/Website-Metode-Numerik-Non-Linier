@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metode Newton-Raphson</title>
+</head>
+<body>
+    <h1>Metode Newton-Raphson</h1>
+
+    <form method="POST">
+        <label for="func">Fungsi :</label>
+        <input type="text" id="func" name="func" placeholder="x**3 + 2*x**2 + 10*x - 20" required><br><br>
+
+        <label for="x0">Tebakan Awal (a):</label>
+        <input type="text" id="x0" name="x0" placeholder="2" required><br><br>
+
+        <label for="x1">Tebakan Awal (b):</label>
+        <input type="text" id="x1" name="x1" placeholder="2" required><br><br>
+
+        <label for="tol">Toleransi Error:</label>
+        <input type="text" id="tol" name="tol" placeholder="0.00001" required><br><br>
+
+        <label for="max_iter">Maksimum Iterasi:</label>
+        <input type="text" id="max_iter" name="max_iter" placeholder="" required><br><br>
+
+        <button type="submit">Hitung</button>
+    </form>
+
+    {% if result %}
+        <h2>Hasil Iterasi</h2>
+        <table border="1">
+            <tr>
+                <th>Iterasi</th>
+                <th>x</th>
+                <th>f(x)</th>
+                <th>df(x)</th>
+                <th>x1</th>
+                <th>Error</th>
+            </tr>
+            {% for row in result %}
+                {% if row is string %}
+                    <tr><td colspan="6">{{ row }}</td></tr>
+                {% else %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ '{:.6f}'.format(row[1]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[2]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[3]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[4]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[5]) }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metode Biseksi</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            text-align: center;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Metode Biseksi</h1>
+    <form method="POST">
+        <label for="func">Fungsi:</label>
+        <input type="text" id="func" name="func" placeholder="x**3 + 2*x**2 + 10*x - 20" required><br><br>
+        <label for="a">Tebakan Awal (a):</label>
+        <input type="text" id="a" name="a" placeholder="2" required><br><br>
+        <label for="b">Tebakan Awal (b):</label>
+        <input type="text" id="b" name="b" placeholder="3" required><br><br>
+        <label for="tol">Toleransi Error:</label>
+        <input type="text" id="tol" name="tol" placeholder="0.00001" required><br><br>
+        <label for="max_iter">Maksimum Iterasi:</label>
+        <input type="text" id="max_iter" name="max_iter" placeholder="100" required><br><br>
+        <button type="submit">Hitung</button>
+    </form>
+    {% if result %}
+    <h2>Hasil Perhitungan</h2>
+    {% if result[0] == "Error" %}
+        <p>{{ result[0] }}</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Iterasi</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>f(c)</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in result %}
+                    <tr>
+                        <td>{{ row.Iterasi }}</td>
+                        <td>{{ '{:.6f}'.format(row.a) }}</td>
+                        <td>{{ '{:.6f}'.format(row.b) }}</td>
+                        <td>{{ '{:.6f}'.format(row.c) }}</td>
+                        <td>{{ '{:.6f}'.format(row['f(c)']) }}</td>
+                        <td>{{ '{:.6f}'.format(row.Error) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p><strong>Akar:</strong> {{ '{:.6f}'.format(root) }}</p>
+    {% endif %}
+{% endif %}
+</body>
+</html>
