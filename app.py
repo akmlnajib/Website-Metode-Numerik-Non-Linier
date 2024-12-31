@@ -4,6 +4,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
+#Newton Raphson
 def newton_raphson(f, df, x0, x1, tol, max_iter):
     result = []
     for i in range(1, max_iter + 1):
@@ -64,6 +65,7 @@ def metode_biseksi(f, a, b, tol, max_iter):
             a = c
     return pd.DataFrame(tabel_iterasi, columns=["Iterasi", "a", "b", "c", "f(c)", "Error"]), None
 
+# Bisection
 @app.route('/bisection', methods=['GET', 'POST'])
 def bisection():
     if request.method == 'POST':
@@ -86,6 +88,53 @@ def bisection():
         except Exception as e:
             return render_template('bisection.html', result=[f"Error: {e}"])
     return render_template('bisection.html', result=None)
+
+# Regula Falsi method implementation
+def regula_falsi(f, a, b, tol, max_iter):
+    results = []
+    if f(a) * f(b) > 0:
+        return "Error: Fungsi tidak memiliki akar di dalam interval yang diberikan."
+
+    for i in range(1, max_iter + 1):
+        c = b - (f(b) * (b - a)) / (f(b) - f(a))
+        error = abs(f(c))
+        results.append([i, a, b, c, f(c), error])
+
+        if error < tol:
+            return results, f"Akar ditemukan: {c:.6f} dengan error: {error:.6f} setelah {i} iterasi."
+
+        if f(a) * f(c) < 0:
+            b = c
+        else:
+            a = c
+
+    return results, "Metode tidak konvergen dalam batas iterasi maksimum."
+
+@app.route('/regulasi', methods=['GET', 'POST'])
+def regulasi():
+    if request.method == 'POST':
+        # Get user inputs
+        func_input = request.form['func']
+        a = float(request.form['a'])
+        b = float(request.form['b'])
+        tol = float(request.form['tol'])
+        max_iter = int(request.form['max_iter'])
+
+        # Parse the function input
+        x = sp.symbols('x')
+        try:
+            func = sp.sympify(func_input)
+            f = sp.lambdify(x, func)
+        except sp.SympifyError:
+            return render_template('regulasi.html', message="Error: Fungsi tidak valid.")
+
+        # Run Regula Falsi method
+        results, message = regula_falsi(f, a, b, tol, max_iter)
+        
+        return render_template('regulasi.html', results=results, message=message, func_input=func_input)
+
+    return render_template('regulasi.html', results=None, message=None, func_input="")
+
 
 @app.route('/')
 def home():

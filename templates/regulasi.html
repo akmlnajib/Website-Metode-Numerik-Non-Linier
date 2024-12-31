@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regula Falsi Method</title>
+</head>
+<body>
+    <h1>Regula Falsi Method for Root Finding</h1>
+    
+    <form method="POST">
+        <label for="func">Fungsi (misalnya x**3 + 4*x**2 + 5*x - 10): </label>
+        <input type="text" id="func" name="func" value="{{ func_input }}" required><br><br>
+
+        <label for="a">Batas Bawah (a): </label>
+        <input type="text" id="a" name="a" required><br><br>
+
+        <label for="b">Batas Atas (b): </label>
+        <input type="text" id="b" name="b" required><br><br>
+
+        <label for="tol">Toleransi Error: </label>
+        <input type="text" id="tol" name="tol" required><br><br>
+
+        <label for="max_iter">Maksimum Iterasi: </label>
+        <input type="text" id="max_iter" name="max_iter" required><br><br>
+
+        <input type="submit" value="Hitung">
+    </form>
+
+    {% if message %}
+        <h2>{{ message }}</h2>
+    {% endif %}
+
+    {% if results %}
+        <h3>Iterasi Hasil untuk Fungsi: {{ func_input }} {{ c:.6f }}</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Iterasi</th>
+                    <th>a</th>
+                    <th>b</th>
+                    <th>c</th>
+                    <th>f(c)</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ '{:.6f}'.format(row[1]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[2]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[3]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[4]) }}</td>
+                        <td>{{ '{:.6f}'.format(row[5]) }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>
