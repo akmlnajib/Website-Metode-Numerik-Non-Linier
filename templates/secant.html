@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metode Secant</title>
+</head>
+<body>
+    <h1>Metode Secant untuk Menyelesaikan Persamaan</h1>
+    <form method="POST">
+        <label for="func">Masukkan fungsi (gunakan 'x' untuk variabel):</label>
+        <input type="text" name="func" value="x**3 + 4*x**2 + 5*x - 10" required><br><br>
+
+        <label for="x0">Masukkan nilai awal pertama (x0):</label>
+        <input type="number" step="any" name="x0" required><br><br>
+
+        <label for="x1">Masukkan nilai awal kedua (x1):</label>
+        <input type="number" step="any" name="x1" required><br><br>
+
+        <label for="tol">Masukkan toleransi error:</label>
+        <input type="number" step="any" name="tol" required><br><br>
+
+        <label for="max_iter">Masukkan maksimum iterasi:</label>
+        <input type="number" name="max_iter" required><br><br>
+
+        <button type="submit">Hitung</button>
+    </form>
+
+    {% if error %}
+        <p style="color:red;">Error: {{ error }}</p>
+    {% endif %}
+
+    {% if results %}
+        <h2>Hasil Iterasi</h2>
+        <table border="1">
+            <tr>
+                <th>Iterasi</th>
+                <th>x0</th>
+                <th>x1</th>
+                <th>x2</th>
+                <th>f(x2)</th>
+                <th>Error</th>
+            </tr>
+            {% for result in results %}
+                {% if result is string %}
+                    <tr><td colspan="6">{{ result }}</td></tr>
+                {% else %}
+                    <tr>
+                        <td>{{ result['iterasi'] }}</td>
+                        <td>{{ result['x0'] }}</td>
+                        <td>{{ result['x1'] }}</td>
+                        <td>{{ result['x2'] }}</td>
+                        <td>{{ result['f_x2'] }}</td>
+                        <td>{{ result['error'] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    {% endif %}
+</body>
+</html>

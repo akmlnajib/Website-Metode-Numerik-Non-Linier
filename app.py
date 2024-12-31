@@ -135,6 +135,56 @@ def regulasi():
 
     return render_template('regulasi.html', results=None, message=None, func_input="")
 
+# Secant
+def secant_method(f, x0, x1, tol, max_iter):
+    results = []
+    for i in range(1, max_iter + 1):
+        f_x0 = f(x0)
+        f_x1 = f(x1)
+        if f_x1 - f_x0 == 0:
+            results.append("Error: Pembagian dengan nol, metode gagal.")
+            return results
+        x2 = x1 - f_x1 * (x1 - x0) / (f_x1 - f_x0)
+        error = abs(x2 - x1)
+        results.append({
+            'iterasi': i,
+            'x0': round(x0, 6),
+            'x1': round(x1, 6),
+            'x2': round(x2, 6),
+            'f_x2': round(f(x2), 6),
+            'error': round(error, 6)
+        })
+        if error < tol:
+            results.append(f"Akar ditemukan: {round(x2, 6)} dengan error: {round(error,6)} setelah {i} iterasi.")
+            return results
+        x0, x1 = x1, x2
+    results.append("Metode tidak konvergen dalam batas iterasi maksimum.")
+    return results
+
+@app.route('/secant', methods=['GET', 'POST'])
+def secant():
+    if request.method == 'POST':
+        # Ambil input fungsi dari form
+        func_str = request.form['func']
+        x0 = float(request.form['x0'])
+        x1 = float(request.form['x1'])
+        tol = float(request.form['tol'])
+        max_iter = int(request.form['max_iter'])
+
+        try:
+            # Mengonversi string menjadi fungsi menggunakan sympy
+            x = sp.symbols('x')
+            func = sp.sympify(func_str)
+            f = sp.lambdify(x, func, 'numpy')
+
+            results = secant_method(f, x0, x1, tol, max_iter)
+            return render_template('secant..html', results=results)
+
+        except Exception as e:
+            return render_template('secant.html', error=str(e), results=None)
+
+    return render_template('secant.html', results=None)
+
 
 @app.route('/')
 def home():
