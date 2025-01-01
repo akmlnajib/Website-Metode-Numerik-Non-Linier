@@ -13,7 +13,7 @@ def newton_raphson(f, df, x0, x1, tol, max_iter):
         if dfx == 0:
             result.append("Error: Turunan nol, metode gagal.")
             return result
-        x1 = x1 - fx / dfx # x1 tetap seperti input
+        x1 = x1 - fx / dfx 
         error = abs(x1 - x0)
         result.append((i, x0, fx, dfx, x1, error))
         if error < tol:
@@ -27,21 +27,18 @@ def newton_raphson(f, df, x0, x1, tol, max_iter):
 def index():
     if request.method == 'POST':
         try:
-            # Ambil input pengguna
             func_input = request.form['func']
             x0 = float(request.form['x0'])
             x1 = float(request.form['x1'])
             tol = float(request.form['tol'])
             max_iter = int(request.form['max_iter'])
             
-            # Definisikan fungsi dari input pengguna
             x = sp.symbols('x')
             func = sp.sympify(func_input)
             dfunc = sp.diff(func, x)
             f = sp.lambdify(x, func)
             df = sp.lambdify(x, dfunc)
             
-            # Jalankan metode Newton-Raphson
             result = newton_raphson(f, df, x0, x1, tol, max_iter)
             return render_template('newton.html', result=result)
         except Exception as e:
@@ -80,7 +77,6 @@ def bisection():
             func = sp.sympify(func_input)
             f = sp.lambdify(x, func)
 
-            # Panggil metode biseksi
             result, root = metode_biseksi(f, a, b, tol, max_iter)
             if result is None:
                 return render_template('bisection.html', result=[f"Error: {root}"])
@@ -89,7 +85,7 @@ def bisection():
             return render_template('bisection.html', result=[f"Error: {e}"])
     return render_template('bisection.html', result=None)
 
-# Regula Falsi method implementation
+# Regula Falsi
 def regula_falsi(f, a, b, tol, max_iter):
     results = []
     if f(a) * f(b) > 0:
@@ -120,7 +116,6 @@ def regulasi():
         tol = float(request.form['tol'])
         max_iter = int(request.form['max_iter'])
 
-        # Parse the function input
         x = sp.symbols('x')
         try:
             func = sp.sympify(func_input)
@@ -128,7 +123,6 @@ def regulasi():
         except sp.SympifyError:
             return render_template('regulasi.html', message="Error: Fungsi tidak valid.")
 
-        # Run Regula Falsi method
         results, message = regula_falsi(f, a, b, tol, max_iter)
         
         return render_template('regulasi.html', results=results, message=message, func_input=func_input)
@@ -136,11 +130,6 @@ def regulasi():
     return render_template('regulasi.html', results=None, message=None, func_input="")
 
 # Secant
-from flask import Flask, render_template, request
-import sympy as sp
-
-app = Flask(__name__)
-
 def secant_method(f, x0, x1, tol, max_iter):
     results = []
     for i in range(1, max_iter + 1):
@@ -176,7 +165,6 @@ def secant():
         max_iter = int(request.form['max_iter'])
 
         try:
-            # Mengonversi string menjadi fungsi menggunakan sympy
             x = sp.symbols('x')
             func = sp.sympify(func_str)
             f = sp.lambdify(x, func, 'numpy')
