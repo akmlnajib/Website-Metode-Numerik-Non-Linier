@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 import sympy as sp
 import pandas as pd
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='assets')
 
 #Newton Raphson
 def newton_raphson(f, df, x0, x1, tol, max_iter):
@@ -109,7 +109,6 @@ def regula_falsi(f, a, b, tol, max_iter):
 @app.route('/regulasi', methods=['GET', 'POST'])
 def regulasi():
     if request.method == 'POST':
-        # Get user inputs
         func_input = request.form['func']
         a = float(request.form['a'])
         b = float(request.form['b'])
