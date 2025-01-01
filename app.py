@@ -136,6 +136,11 @@ def regulasi():
     return render_template('regulasi.html', results=None, message=None, func_input="")
 
 # Secant
+from flask import Flask, render_template, request
+import sympy as sp
+
+app = Flask(__name__)
+
 def secant_method(f, x0, x1, tol, max_iter):
     results = []
     for i in range(1, max_iter + 1):
@@ -148,14 +153,14 @@ def secant_method(f, x0, x1, tol, max_iter):
         error = abs(x2 - x1)
         results.append({
             'iterasi': i,
-            'x0': round(x0, 6),
-            'x1': round(x1, 6),
-            'x2': round(x2, 6),
-            'f_x2': round(f(x2), 6),
-            'error': round(error, 6)
+            'x0': x0,
+            'x1': x1,
+            'x2': x2,
+            'f_x2': f(x2),
+            'error': error
         })
         if error < tol:
-            results.append(f"Akar ditemukan: {round(x2, 6)} dengan error: {round(error,6)} setelah {i} iterasi.")
+            results.append(f"Akar ditemukan: {x2:.6f} dengan error: {error:.6f} setelah {i} iterasi.")
             return results
         x0, x1 = x1, x2
     results.append("Metode tidak konvergen dalam batas iterasi maksimum.")
@@ -164,7 +169,6 @@ def secant_method(f, x0, x1, tol, max_iter):
 @app.route('/secant', methods=['GET', 'POST'])
 def secant():
     if request.method == 'POST':
-        # Ambil input fungsi dari form
         func_str = request.form['func']
         x0 = float(request.form['x0'])
         x1 = float(request.form['x1'])
@@ -178,12 +182,13 @@ def secant():
             f = sp.lambdify(x, func, 'numpy')
 
             results = secant_method(f, x0, x1, tol, max_iter)
-            return render_template('secant..html', results=results)
+            return render_template('secant.html', results=results, error=None)
 
         except Exception as e:
             return render_template('secant.html', error=str(e), results=None)
 
-    return render_template('secant.html', results=None)
+    return render_template('secant.html', results=None, error=None)
+
 
 
 @app.route('/')

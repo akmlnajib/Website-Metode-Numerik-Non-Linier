@@ -47,11 +47,11 @@
                 {% else %}
                     <tr>
                         <td>{{ result['iterasi'] }}</td>
-                        <td>{{ result['x0'] }}</td>
-                        <td>{{ result['x1'] }}</td>
-                        <td>{{ result['x2'] }}</td>
-                        <td>{{ result['f_x2'] }}</td>
-                        <td>{{ result['error'] }}</td>
+                        <td>{{ '{:.6f}'.format(result['x0']) }}</td>
+                        <td>{{ '{:.6f}'.format(result['x1']) }}</td>
+                        <td>{{ '{:.6f}'.format(result['x2']) }}</td>
+                        <td>{{ '{:.6f}'.format(result['f_x2']) }}</td>
+                        <td>{{ '{:.6f}'.format(result['error']) }}</td>
                     </tr>
                 {% endif %}
             {% endfor %}
