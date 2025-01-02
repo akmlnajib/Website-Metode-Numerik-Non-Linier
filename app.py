@@ -40,9 +40,9 @@ def index():
             df = sp.lambdify(x, dfunc)
             
             result = newton_raphson(f, df, x0, x1, tol, max_iter)
-            return render_template('newton.html', result=result)
+            return render_template('newton.html', func_input=func_input,result=result)
         except Exception as e:
-            return render_template('newton.html', result=[f"Error: {e}"])
+            return render_template('newton.html', func_input=func_input,result=[f"Error: {e}"])
 
     return render_template('newton.html', result=None)
 def metode_biseksi(f, a, b, tol, max_iter):
@@ -79,8 +79,8 @@ def bisection():
 
             result, root = metode_biseksi(f, a, b, tol, max_iter)
             if result is None:
-                return render_template('bisection.html', result=[f"Error: {root}"])
-            return render_template('bisection.html', result=result.to_dict(orient='records'), root=root)
+                return render_template('bisection.html',func_input=func_input, result=[f"Error: {root}"])
+            return render_template('bisection.html', func_input=func_input,result=result.to_dict(orient='records'), root=root)
         except Exception as e:
             return render_template('bisection.html', result=[f"Error: {e}"])
     return render_template('bisection.html', result=None)
@@ -106,7 +106,7 @@ def regula_falsi(f, a, b, tol, max_iter):
 
     return results, "Metode tidak konvergen dalam batas iterasi maksimum."
 
-@app.route('/regulasi', methods=['GET', 'POST'])
+@app.route('/regula', methods=['GET', 'POST'])
 def regulasi():
     if request.method == 'POST':
         func_input = request.form['func']
@@ -169,7 +169,7 @@ def secant():
             f = sp.lambdify(x, func, 'numpy')
 
             results = secant_method(f, x0, x1, tol, max_iter)
-            return render_template('secant.html', results=results, error=None)
+            return render_template('secant.html',func_input=func_str, results=results, error=None)
 
         except Exception as e:
             return render_template('secant.html', error=str(e), results=None)
